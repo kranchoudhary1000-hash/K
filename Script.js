@@ -1,105 +1,134 @@
+/* ===== ELEMENTS ===== */
 const loader = document.getElementById("loader");
 const app = document.getElementById("app");
 const chat = document.getElementById("chat");
-const status = document.getElementById("status");
+const statusText = document.getElementById("status");
+const proposal = document.getElementById("proposal");
+const finalScreen = document.getElementById("final");
 const music = document.getElementById("music");
+const canvas = document.getElementById("fx");
+const ctx = canvas.getContext("2d");
 
-/* LOADER FIX */
-window.onload = () => {
+/* ===== CANVAS SETUP ===== */
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+/* ===== LOADER FIX ===== */
+window.addEventListener("load", () => {
   setTimeout(() => {
     loader.style.display = "none";
     app.classList.remove("hidden");
+    startChat();
   }, 2000);
-};
+});
 
-const msgs=[
- "Hey 👋",
- "Tumhe ek baat batani thi…",
- "Tum jab se meri life me aaye ho 💫",
- "Sab kuch beautiful lagne laga hai 😍",
- "Aur haan…",
- "I really really like you ❤️"
+/* ===== CHAT DATA ===== */
+const messages = [
+  "Hey 👋",
+  "Tum online ho?",
+  "Mujhe tumse kuch kehna tha…",
+  "Kaafi time se soch raha hoon 🤍",
+  "Tumhari smile sabse cute hai 😍",
+  "Tum meri life ko special bana deti ho ✨",
+  "Aur haan…",
+  "I really like you ❤️"
 ];
 
-let i=0;
+let msgIndex = 0;
 
-function typing(){
-  status.innerText="typing...";
-  setTimeout(()=>status.innerText="online",700);
+/* ===== CHAT FUNCTIONS ===== */
+function setTyping(on) {
+  statusText.innerText = on ? "typing..." : "online";
 }
 
-function addMsg(text){
-  typing();
-  setTimeout(()=>{
-    const div=document.createElement("div");
-    div.className="msg me";
-    div.innerText=text;
-    chat.appendChild(div);
-  },700);
+function addMessage(text) {
+  const msg = document.createElement("div");
+  msg.className = "msg me";
+  msg.innerText = text;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
 }
 
-function start(){
-  if(i<msgs.length){
-    addMsg(msgs[i]);
-    i++;
-    setTimeout(start,1600);
-  }else{
-    setTimeout(()=>{
-      document.getElementById("proposal").classList.remove("hidden");
-      music.play();
-    },1200);
+function startChat() {
+  if (msgIndex < messages.length) {
+    setTyping(true);
+
+    setTimeout(() => {
+      setTyping(false);
+      addMessage(messages[msgIndex]);
+      msgIndex++;
+      setTimeout(startChat, 1200);
+    }, 700);
+
+  } else {
+    // chat finished → show proposal
+    setTimeout(() => {
+      proposal.classList.remove("hidden");
+    }, 1200);
   }
 }
-setTimeout(start,1200);
 
-/* YES */
-function yes(){
-  document.getElementById("proposal").classList.add("hidden");
-  document.getElementById("final").classList.remove("hidden");
-  fireworks();
+/* ===== YES BUTTON ===== */
+function yes() {
+  proposal.classList.add("hidden");
+  finalScreen.classList.remove("hidden");
+
+  // music allowed only after user click
+  if (music) {
+    music.volume = 0.6;
+    music.play().catch(() => {});
+  }
+
+  startFireworks();
 }
 
-/* FIREWORKS */
-const canvas=document.getElementById("fx");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-let p=[];
+/* ===== FIREWORKS EFFECT ===== */
+let particles = [];
 
-function fireworks(){
-  setInterval(()=>{
-    for(let i=0;i<80;i++){
-      p.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        r:Math.random()*3+1,
-        dx:Math.random()*4-2,
-        dy:Math.random()*4-2
+function startFireworks() {
+  setInterval(() => {
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        r: Math.random() * 3 + 1,
+        dx: Math.random() * 6 - 3,
+        dy: Math.random() * 6 - 3,
+        life: 100
       });
     }
-  },350);
+  }, 400);
 }
 
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  p.forEach((e,i)=>{
+function animateFireworks() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach((p, i) => {
     ctx.beginPath();
-    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
-    ctx.fillStyle="rgba(255,0,150,.8)";
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,0,150,0.8)";
     ctx.fill();
-    e.x+=e.dx;
-    e.y+=e.dy;
-    e.r-=0.04;
-    if(e.r<=0)p.splice(i,1);
+
+    p.x += p.dx;
+    p.y += p.dy;
+    p.life--;
+    p.r *= 0.98;
+
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+    }
   });
-  requestAnimationFrame(animate);
-}
-animate();
 
-function yes(){
-  document.getElementById("proposal").classList.add("hidden");
-  document.getElementById("final").classList.remove("hidden");
-
-  music.play(); // now allowed (user clicked)
-  fireworks();
+  requestAnimationFrame(animateFireworks);
 }
+
+animateFireworks();
+
+/* ===== OPTIONAL: SAFETY ===== */
+// prevent errors if YES clicked multiple times
+window.yes = yes;
