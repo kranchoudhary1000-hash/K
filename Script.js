@@ -4,10 +4,13 @@ const chat = document.getElementById("chat");
 const status = document.getElementById("status");
 const music = document.getElementById("music");
 
-setTimeout(()=>{
-  loader.style.display="none";
-  app.classList.remove("hidden");
-},2500);
+/* LOADER FIX */
+window.onload = () => {
+  setTimeout(() => {
+    loader.style.display = "none";
+    app.classList.remove("hidden");
+  }, 2000);
+};
 
 const msgs=[
  "Hey 👋",
@@ -92,3 +95,11 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
+
+function yes(){
+  document.getElementById("proposal").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
+
+  music.play(); // now allowed (user clicked)
+  fireworks();
+}
