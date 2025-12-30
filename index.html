@@ -1,50 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>For Someone Special ❤️</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Special Surprise ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="loader">
-  <h1>Loading Surprise… 💖</h1>
-</div>
-
-<audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<div class="bg"></div>
-
-<div class="app hidden" id="app">
-
-  <div class="phone glass">
-    <div class="top">
-      <span>WhatsApp</span>
-      <small id="status">online</small>
-    </div>
-
-    <div class="chat" id="chat"></div>
-
-    <div class="proposal hidden" id="proposal">
-      <h2>💍 Will You Be Mine?</h2>
-      <p>
-        Tum meri duniya ka sabse khoobsurat hissa ho 💖<br>
-        Kya tum hamesha mere saath rahogi? 🥺
-      </p>
-      <button onclick="yes()">YES ❤️</button>
-    </div>
-
-    <div class="final hidden" id="final">
-      <h1>💖 SHE SAID YES 💖</h1>
-      <p>Best moment of my life ✨</p>
-    </div>
-
+  <!-- LOADING SCREEN -->
+  <div id="loader">
+    <h1>Loading Surprise… 💖</h1>
   </div>
-</div>
 
-<canvas id="fx"></canvas>
-<script src="script.js"></script>
+  <!-- BACKGROUND -->
+  <div class="bg"></div>
+
+  <!-- MUSIC (will play after click) -->
+  <audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- MAIN APP -->
+  <div class="app hidden" id="app">
+
+    <div class="phone glass">
+
+      <!-- TOP BAR -->
+      <div class="top">
+        <span>WhatsApp</span>
+        <small id="status">online</small>
+      </div>
+
+      <!-- CHAT AREA -->
+      <div class="chat" id="chat"></div>
+
+      <!-- PROPOSAL -->
+      <div class="proposal hidden" id="proposal">
+        <h2>💍 Will You Be Mine?</h2>
+        <p>
+          Tum meri life ka sabse special hissa ho ❤️<br>
+          Kya tum hamesha mere saath rahogi? 🥺
+        </p>
+        <button onclick="yes()">YES ❤️</button>
+      </div>
+
+      <!-- FINAL SCREEN -->
+      <div class="final hidden" id="final">
+        <h1>💖 SHE SAID YES 💖</h1>
+        <p>This moment is forever ✨</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EFFECT CANVAS -->
+  <canvas id="fx"></canvas>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+
 </body>
 </html>
